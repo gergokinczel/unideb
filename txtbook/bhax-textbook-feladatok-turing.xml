@@ -1,0 +1,299 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Turing!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+    <section>
+        <title>Végtelen ciklus</title>
+        <para>
+            Írj olyan C végtelen ciklusokat, amelyek 0 illetve 100 százalékban dolgoztatnak egy magot és egy olyat, amely  
+            100 százalékban minden magot!
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://youtu.be/lvmi6tyz-nI">https://youtu.be/lvmi6tyz-nI</link>
+        </para>
+        <para>
+            Megoldás forrása: 
+        </para>
+            <programlisting language="c"><![CDATA[    0%
+#include<stdio.h>
+#include<unistd.h>
+    int main()
+    {
+	for(;;)
+	sleep(5);
+	return 0;
+    }
+
+    100%
+    ...
+        while(1){}
+    ...
+    
+    Mind 100%
+    ...
+        #pragma omp parallel
+        for(;;);
+        return 0;
+    ...
+]]></programlisting>          
+        <para>
+            Fordítani pedig a <function>gcc prognev.c -fopenmp</function> paranccsal.
+        </para>
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para> 
+        <para>
+            Ezek a programok könnyedén megérthetőek, ezáltal egyszerűen meg lehetett tudni például: miként is tudunk egyszerre 
+            több magot felhasználni egy művelethez, melynek akár a későbbiekben még hasznát vehetjük.
+        </para>   
+           
+    </section>        
+        
+    <section>
+        <title>Lefagyott, nem fagyott, akkor most mi van?</title>
+        <para>
+            Mutasd meg, hogy nem lehet olyan programot írni, amely bármely más programról eldönti, hogy le fog-e fagyni vagy sem!
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:  tegyük fel, hogy akkora haxorok vagyunk, hogy meg tudjuk írni a <function>Lefagy</function>
+            függvényt, amely tetszőleges programról el tudja dönteni, hogy van-e benne vlgtelen ciklus:              
+        </para>
+        <programlisting language="c"><![CDATA[Program T100
+{
+
+	boolean Lefagy(Program P)
+	{
+		 if(P-ben van végtelen ciklus)
+			return true;
+		 else
+			return false; 
+	}
+
+	main(Input Q)
+	{
+		Lefagy(Q)
+	}
+}]]></programlisting>            
+        <para>
+            A program futtatása, például akár az előző <filename>v.c</filename> ilyen pszeudókódjára:
+            <screen><![CDATA[T100(t.c.pseudo)
+true]]></screen>            
+            akár önmagára
+            <screen><![CDATA[T100(T100)
+false]]></screen>  
+            ezt a kimenetet adja.          
+        </para>
+        <para>
+            A T100-as programot felhasználva készítsük most el az alábbi T1000-set, amelyben a
+            Lefagy-ra épőlő Lefagy2 már nem tartalmaz feltételezett, csak csak konkrét kódot:
+        </para>
+        <programlisting language="c"><![CDATA[Program T1000
+{
+
+	boolean Lefagy(Program P)
+	{
+		 if(P-ben van végtelen ciklus)
+			return true;
+		 else
+			return false; 
+	}
+
+	boolean Lefagy2(Program P)
+	{
+		 if(Lefagy(P))
+			return true;
+		 else
+			for(;;); 
+	}
+
+	main(Input Q)
+	{
+		Lefagy2(Q)
+	}
+
+}]]></programlisting>            
+        <programlisting><![CDATA[]]></programlisting>            
+        <para>
+            Mit for kiírni erre a <computeroutput>T1000(T1000)</computeroutput> futtatásra?
+                                
+            <itemizedlist>
+                <listitem>
+                    <para>Ha T1000 lefagyó, akkor nem fog lefagyni, kiírja, hogy true</para>                        
+                </listitem>
+                <listitem>
+                    <para>Ha T1000 nem fagyó, akkor pedig le fog fagyni...</para>                        
+                </listitem>
+            </itemizedlist>
+            akkor most hogy fog működni? Sehogy, mert ilyen <function>Lefagy</function>
+            függvényt, azaz a T100 program nem is létezik.                
+        </para>
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            Ahogyan azt az előző részben is megjegyezték, egy <function>Lefagy</function> függvényt nem lehet létrehozni, mert
+            hát ha lefagy, abban az esetben nem tud egy üzenetet küldeni, amennyiben pedig nem fagy le alapból értéktelen a program
+            használata.
+        </para>
+    </section>        
+                
+    <section>
+        <title>Változók értékének felcserélése</title>
+        <para>
+            Írj olyan C programot, amely felcseréli két változó értékét, bármiféle logikai utasítás vagy kifejezés
+            nasználata nélkül!
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://bhaxor.blog.hu/2018/08/28/10_begin_goto_20_avagy_elindulunk">https://bhaxor.blog.hu/2018/08/28/10_begin_goto_20_avagy_elindulunk</link>
+        </para>
+        <para>
+            Megoldás forrása:  
+        </para>
+        <programlisting language="c"><![CDATA[#include <stdio.h>
+int main()
+{
+	int x,y;
+	scanf ("%d %d",&x,&y);
+	x=x^y;
+	y=x^y;
+	x=x^y;
+	printf("%d %d \n",x,y);
+	return 0;
+}     ]]></programlisting> 
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            Több módszer is létezik melynek segítségével segédváltozók és logikai kifejezések nélkül is felcserélhetünk két
+            változót. Ezen módszerek közül az exorral való felcserélést adtam meg példának, de ugyanakkor kivonás-összeadással és
+            szozás-osztással is meg lehet oldani.
+        </para>
+        
+    </section>                     
+
+    <section>
+        <title>Labdapattogás</title>
+        <para>
+            Először if-ekkel, majd bármiféle logikai utasítás vagy kifejezés
+            nasználata nélkül írj egy olyan programot, ami egy labdát pattogtat a karakteres konzolon! (Hogy mit értek
+            pattogtatás alatt, alább láthatod a videókon.)
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://bhaxor.blog.hu/2018/08/28/labdapattogas">https://bhaxor.blog.hu/2018/08/28/labdapattogas</link>
+        </para>
+        <para>
+            Megoldás forrása:  If-ekkel <link xlink:href="https://bhaxor.blog.hu/2018/08/28/labdapattogas">https://bhaxor.blog.hu/2018/08/28/labdapattogas</link>
+        </para>
+        <para>
+        If-ek nélkül <link xlink:href="https://github.com/gergokinczel/unideb/blob/master/pat.c">https://github.com/gergokinczel/unideb/blob/master/pat.c</link>
+        </para>
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            A labdapattogás mint olyan, tulajdonképpen csak a labda két koordinátájának változtatgatása attól függően, hogy
+            milyen irányba kell haladjon a labda. Az if-ekkel történő megoldás során folyamatosan ellenőrizzük, hogy a labda elérte
+            e már a konzol egyik oldalát, majd aszerint változtatjuk a koordinátákat,hogy melyik oldalt érte el.
+            A nem if-ekkel történő megoldásban pedig különböző matematikai műveletek segítségével
+            tudjuk a labda röppályályát szabályozni.
+        </para>
+    </section>                     
+
+    <section>
+        <title>Szóhossz és a Linus Torvalds féle BogoMIPS</title>
+        <para>
+            Írj egy programot, ami megnézi, hogy hány bites a szó a gépeden, azaz mekkora az <type>int</type> mérete.
+            Használd ugyanazt a while ciklus fejet, amit Linus Torvalds a BogoMIPS rutinjában! 
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://youtu.be/9KnMqrkj_kU">https://youtu.be/9KnMqrkj_kU</link>
+        </para>
+        <para>
+            Megoldás forrása: 
+        </para>
+            <programlisting language="c"><![CDATA[#include <stdio.h>
+int main()
+{
+    int hosz = 0, szo = 1;
+    do
+    {
+        hosz++;
+    } while(szo <<= 1);
+    printf("%d bites egy szo.\n", hosz);
+    return 0;
+}]]></programlisting>
+        <para>
+            Tanulságok, tapasztalatok, magyarázat... 
+        </para>
+        <para>
+            A program shiftelés segítségével tudja meghatározni az int típus hosszát, mely hasznos lehet ha nagyon nagy számokkal
+            dolgozunk, megtudván a típus határait.
+        </para>
+    </section>                     
+
+    <section>
+        <title>Helló, Google!</title>
+        <para>
+            Írj olyan C programot, amely egy 4 honlapból álló hálózatra kiszámolja a négy lap Page-Rank 
+            értékét!
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href=""></link>
+        </para>
+        <para>
+            Megoldás forrása: <link xlink:href="https://github.com/gergokinczel/unideb/blob/master/pagerank.c">https://github.com/gergokinczel/unideb/blob/master/pagerank.c</link>
+        </para>
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            A Page Rank talán az egyik legfontosabb algoritmus, melyet egy keresőmotor használhat, így tehát még a Google is 
+            ezt az algoritmust használja. Főbb funkciója az oldalak "ranking"-je azaz rangsorolása/értékelése. Egy oldalnak annál
+            nagyobb a rangja minél több értékes oldal mutat rá, ugyanis annál kevesebbet ér egy másik oldalra való mutatás
+            minél több kifelé hivatkozó link van az adott oldalon. Szóval ha egy oldalra több száz oldal mutat rá, de minden egyes
+            rámutatás mellett az oldalakon több száz másik hivatkozás is van, ennek az oldalnak kisebb lesz a rangja, mint egy olyan
+            oldalnak melyre csak pár száz oldal mutat, de minden egyes oldal mely rá mutat nem tartalmaz több hivatkozást.
+        </para>
+    </section>
+
+    <section xml:id="Brun">
+        <title>100 éves a Brun tétel</title>
+        <para>
+            Írj R szimulációt a Brun tétel demonstrálására!
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://youtu.be/xbYhp9G6VqQ">https://youtu.be/xbYhp9G6VqQ</link>
+        </para>
+        <para>
+            Megoldás forrása: <link xlink:href="https://gitlab.com/nbatfai/bhax/blob/master/attention_raising/Primek_R">https://gitlab.com/nbatfai/bhax/blob/master/attention_raising/Primek_R</link>
+        </para>
+    </section>
+    
+    <section xml:id="bhax-textbook-feladatok-turing.MontyHall">
+        <title>A Monty Hall probléma</title>
+        <para>
+            Írj R szimulációt a Monty Hall problémára!
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://bhaxor.blog.hu/2019/01/03/erdos_pal_mit_keresett_a_nagykonyvben_a_monty_hall-paradoxon_kapcsan">https://bhaxor.blog.hu/2019/01/03/erdos_pal_mit_keresett_a_nagykonyvben_a_monty_hall-paradoxon_kapcsan</link>
+        </para>
+        <para>
+            Megoldás forrása: <link xlink:href="https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/MontyHall_R">https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/MontyHall_R</link>
+        </para>
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            Elsőre nekem is nehéz volt belátnom, hogy valóban érdemes e váltani az eredeti döntés után és szkeptikus voltam a
+            matematikai bebizonyításról. A szimuláció viszont rámutat ennek helyességére és el lehet ismerni, hogy a változtatás
+            valóban megnöveli esélyeinket.
+        </para>
+    </section>
+
+</chapter>                
