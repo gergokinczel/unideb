@@ -14,10 +14,40 @@
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása:
         </para>
+              <programlisting language="c"><![CDATA[#include <stdio.h>
+			int main(){
+			int n;
+			printf("Adjon meg egy szamot: ");
+			scanf("%d", &n);
+			for(int i=0;i<n;i++)
+			{
+                                if(i%5==0 && i!=0) printf(" ");
+                                if(i%50==0)
+                                printf("\n");
+                                printf("I");
+			}
+                        printf("\n");
+			return 0;
+			}]]></programlisting>
+        <para>
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata fileref="turing.png"/>
+                </imageobject>
+                <textobject>
+                    <phrase>Turing ábra</phrase>
+                </textobject>
+            </inlinemediaobject>                
+        </para>
+        
         <para>
             Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            Decimálisból unárisba úgy váltjuk a számokat, hogy amennyi a decimális szám annyiszor megy végbe a ciklus és annyi 
+            darab I karaktert fogunk a képernyőre íratni ötössével elválasztva.
         </para>
     </section>        
         
@@ -50,8 +80,31 @@
         <para>
             Megoldás forrása:  
         </para>
+        <programlisting><![CDATA[#include <stdio.h>
+int main()
+{
+	for(int i=0;i<5;i++)
+		printf("o");
+	return 0;
+}]]></programlisting>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            A következő módon néz ki a C utasítás fogalma ha BNF-ben definiáljuk:
+        </para>
+        <programlisting><![CDATA[
+<utasítás> ::=
+               <címkézett utasítás>    ::= <azonosító> | "case" | "default"
+               <kifejezésutasítás>     ::= <kifejezés>
+               <öszetett utasítás>     ::= <deklarációs lista> | <utasítás lista>
+               <kiválasztó utasítás>   ::= "if" | "if else" | "switch"
+               <iterációs utasítás>    ::= "while" | "do while" | "for"
+               <vezérlésátadó utasítás>::= "goto" | "continue" | "break" | "return"
+            ]]></programlisting>
+        <para>
+            Fentébb szerepel az a kódcsipet mely nem fordul le C89-es szabvánnyal, C99-el viszont igen, mivel változó deklarálása
+            C89 es szabványba nem szerepelhetett a for ciklus argumentumai között.
         </para>
     </section>                     
 
@@ -63,14 +116,53 @@
             a feladat lényege, hogy lexert használjunk, azaz óriások vállán álljunk és ne kispályázzunk!
         </para>
         <para>
-            Megoldás videó: 
+            Megoldás videó: <link xlink:href="https://youtu.be/9KnMqrkj_kU">https://youtu.be/9KnMqrkj_kU</link>
         </para>
         <para>
             Megoldás forrása:  
         </para>
+        <programlisting><![CDATA[%{
+#include <stdio.h>
+int realnumbers = 0;
+%}
+digit	[0-9]
+%%
+{digit}*(\.{digit}+)?	{++realnumbers; 
+    printf("[realnum=%s %f]", yytext, atof(yytext));}
+%%
+int
+main ()
+{
+ yylex ();
+ printf("The number of real numbers is %d\n", realnumbers);
+ return 0;
+}]]></programlisting>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
         </para>
+        <para>
+            A forráskód három fő részből áll, és a dupla % jelek választják őket külön.
+        </para>
+        <itemizedlist mark="disc">
+            <listitem>
+                <para>
+                    Az elsőben találjuk a definíciókat, ide olyan dolgokat tehetünk mint például a változók.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    A második részbe a szabályokat tesszük, megadjuk a regExp-t. Ebben a példában valós számokat keresünk ezért
+                    digit-et használunk a szabályba melyetet megkülönböztet abban az esetben a pont van előtte, ilyen esetben
+                    tizedes szám lesz belőle.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    A harmadik részbe pedig felhasználói kód kerülhet, ilyen például a valós számok számának a kiíratása.
+                </para>
+            </listitem>
+        </itemizedlist>
+
     </section>                     
 
     <section>
@@ -84,8 +176,37 @@
         <para>
             Megoldás forrása:  
         </para>
+        <programlisting><![CDATA[%{
+#include <stdio.h>
+%}
+%%
+[A-Za-z]+ {char betu[strlen(yytext)];
+strcpy(betu,yytext);
+int i;
+for(i=0;i<strlen(yytext);i++){
+if(betu[i]=='a'||betu[i]=='A')printf("4");
+else if(betu[i]=='i'||betu[i]=='I'||betu[i]=='l'||betu[i]=='L')printf("1");
+else if(betu[i]=='e'||betu[i]=='E')printf("3");
+else if(betu[i]=='b'||betu[i]=='B')printf("8");
+else if(betu[i]=='g'||betu[i]=='G')printf("9");
+else if(betu[i]=='o'||betu[i]=='O')printf("0");
+else if(betu[i]=='r'||betu[i]=='R'||betu[i]=='z'||betu[i]=='Z')printf("2");
+else if(betu[i]=='s'||betu[i]=='S')printf("5");
+else if(betu[i]=='t'||betu[i]=='T')printf("7");
+else printf("%c",betu[i]);}
+} 
+%%
+int main()
+{
+yylex();
+return 0;
+} ]]></programlisting>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            Az előző feladat megoldása alapján lett létrehozva ez a 1337 cipher, mely végig megy az inputon és kicserél minden
+            egyes karaktert melynek létezik egy megfelelője a leet 48c-ből.
         </para>
     </section>                     
 
@@ -117,33 +238,66 @@
             </listitem>
             <listitem>                                    
                 <programlisting><![CDATA[for(i=0; i<5; ++i)]]></programlisting>            
+                <para>
+                    Ismétlő utasítás mely ötször fog ismétlődni, nem jelent bug forrást.
+                </para>
             </listitem>
+            
             <listitem>                                    
-
-                <programlisting><![CDATA[for(i=0; i<5; i++)]]></programlisting>            
+                <programlisting><![CDATA[for(i=0; i<5; i++)]]></programlisting> 
+                <para>
+                    Ismétlő utasítás mely ötször fog ismétlődni, nem jelent bug forrást.
+                </para>           
             </listitem>
+            
             <listitem>                                    
-
-                <programlisting><![CDATA[for(i=0; i<5; tomb[i] = i++)]]></programlisting>            
+                <programlisting><![CDATA[for(i=0; i<5; tomb[i] = i++)]]></programlisting> 
+                <warning>
+                    <title>Bug</title>
+                <para>
+                    Ismétlő utasítás mely ötször fog ismétlődni, viszont amennyiben a tömböt is szeretnénk használni
+                    ez egy jelentős bug forrást jelent.
+                </para>
+                </warning>       
             </listitem>
+            
             <listitem>                                    
-
-                <programlisting><![CDATA[for(i=0; i<n && (*d++ = *s++); ++i)]]></programlisting>            
+                <programlisting><![CDATA[for(i=0; i<n && (*d++ = *s++); ++i)]]></programlisting>
+                <warning><title>Bug</title>
+                <para>
+                    Tekintve, hogy a for ciklusban szereplő argumentum második fele nem egy logikai kifejezés, 
+                    hanem egy pointer értékének a változtatása, ez egy bug forrást jelenthet.
+                </para>   
+                </warning>             
             </listitem>
+            
             <listitem>                                    
-
-                <programlisting><![CDATA[printf("%d %d", f(a, ++a), f(++a, a));]]></programlisting>            
+                <programlisting><![CDATA[printf("%d %d", f(a, ++a), f(++a, a));]]></programlisting>
+                <warning><title>Bug</title>
+                <para>
+                    A printf-ben szereplő f függvény visszatérési értékét írja ki a függvény kétszer, viszont
+                    nincs meghatározva C-ben, hogy az a értéke milyen sorrendben van növelve ezért ez egy jelentős
+                    bug forrás.
+                </para>
+                </warning>            
             </listitem>
+            
             <listitem>                                    
-
-                <programlisting><![CDATA[printf("%d %d", f(a), a);]]></programlisting>            
+                <programlisting><![CDATA[printf("%d %d", f(a), a);]]></programlisting> 
+                <para>
+                    A programrészlet kiírja az f függvény által visszatérített értéket és az a változó értékét.
+                </para>           
             </listitem>
+            
             <listitem>                                    
-
-                <programlisting><![CDATA[printf("%d %d", f(&a), a);]]></programlisting>            
+                <programlisting><![CDATA[printf("%d %d", f(&a), a);]]></programlisting> 
+                <para>
+                    A printf kiírja az f függvény által visszatérített értéket megváltoztathatja az a értékét
+                    és kiírja az eredeti a értéket.
+                </para>           
             </listitem>
         </orderedlist>
-        <para>
+       <!-- <para>
             Megoldás forrása:  
         </para>
 
@@ -153,7 +307,7 @@
 
         <para>
             Tanulságok, tapasztalatok, magyarázat...
-        </para>
+        </para> -->
 
     </section>                     
 
@@ -181,6 +335,12 @@ $(\exists y \forall x (y<x) \supset \neg (x \text{ prím}))$
         <para>
             Tanulságok, tapasztalatok, magyarázat...
         </para>
+        <para>
+            1. Minden x-re létezik egy nála nagyobb y ami prím.
+            2. Minden x létezik egy annál nagyobb ikerprímszám.
+            3. Van olyan y amelynél minden x prím kisebb.
+            4. Van olyan y amelynél bármely nagyobb szám nem prímszám.
+        </para>
     </section>                                                                                                                                                                            
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
     <section>
@@ -192,37 +352,67 @@ $(\exists y \forall x (y<x) \supset \neg (x \text{ prím}))$
 
         <itemizedlist>
             <listitem>
-                <para>egész</para>                        
+                <para>egész</para>  
+                <programlisting><![CDATA[
+                    int a=5;
+                ]]></programlisting>                      
             </listitem>
             <listitem>
-                <para>egészre mutató mutató</para>                        
+                <para>egészre mutató mutató</para>
+                <programlisting><![CDATA[
+                    int *a= &b;
+                ]]></programlisting>                         
             </listitem>
             <listitem>
-                <para>egész referenciája</para>                        
+                <para>egész referenciája</para> 
+                <programlisting><![CDATA[
+                    int &a=b;
+                ]]></programlisting>                        
             </listitem>
             <listitem>
-                <para>egészek tömbje</para>                        
+                <para>egészek tömbje</para>
+                <programlisting><![CDATA[
+                    int v[5]={1,2,3,4,5}
+                ]]></programlisting>                        
             </listitem>
             <listitem>
-                <para>egészek tömbjének referenciája (nem az első elemé)</para>                        
+                <para>egészek tömbjének referenciája (nem az első elemé)</para>
+                <programlisting><![CDATA[
+                    int (&v)[3] = b;
+                ]]></programlisting>                         
             </listitem>
             <listitem>
-                <para>egészre mutató mutatók tömbje</para>                        
+                <para>egészre mutató mutatók tömbje</para> 
+                <programlisting><![CDATA[
+                    int *v[5];
+                ]]></programlisting>                        
             </listitem>
             <listitem>
-                <para>egészre mutató mutatót visszaadó függvény</para>                        
+                <para>egészre mutató mutatót visszaadó függvény</para>
+                <programlisting><![CDATA[
+                    int *fuggveny();
+                ]]></programlisting>                         
             </listitem>
             <listitem>
-                <para>egészre mutató mutatót visszaadó függvényre mutató mutató</para>                        
+                <para>egészre mutató mutatót visszaadó függvényre mutató mutató</para>
+                <programlisting><![CDATA[
+                    int *(*a)()= &f;
+                ]]></programlisting>                         
             </listitem>
             <listitem>
-                <para>egészet visszaadó és két egészet kapó függvényre mutató mutatót visszaadó, egészet kapó függvény</para>                        
+                <para>egészet visszaadó és két egészet kapó függvényre mutató mutatót visszaadó, egészet kapó függvény</para> 
+                <programlisting><![CDATA[
+                    int (*v (int c)) (int a, int b)
+                ]]></programlisting>                        
             </listitem>            
             <listitem>
-                <para>függvénymutató egy egészet visszaadó és két egészet kapó függvényre mutató mutatót visszaadó, egészet kapó függvényre</para>                        
+                <para>függvénymutató egy egészet visszaadó és két egészet kapó függvényre mutató mutatót visszaadó, egészet kapó függvényre</para> 
+                <programlisting><![CDATA[
+                    int (*(*z) (int)) (int, int)
+                ]]></programlisting>                        
             </listitem>            
         </itemizedlist>            
-
+<!--
        <para>
             Mit vezetnek be a programba a következő nevek?
         </para>
@@ -269,7 +459,7 @@ $(\exists y \forall x (y<x) \supset \neg (x \text{ prím}))$
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
-        </para>
+        </para>-->
     </section>                     
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
