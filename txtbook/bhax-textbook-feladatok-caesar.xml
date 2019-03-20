@@ -6,20 +6,76 @@
         </keywordset>
     </info>
     <section>
-        <title><type>int ***</type> háromszögmátrix</title>
+        <title><type>double **</type> háromszögmátrix</title>
+        
         <para>
-           
-        </para>
-        <para>
-            Megoldás videó:
+            Megoldás videó: <link xlink:href="https://www.youtube.com/watch?v=1MRTuKwRsB0">https://www.youtube.com/watch?v=1MRTuKwRsB0</link> 
         </para>
         <para>
             Megoldás forrása:                
         </para>
+        <programlisting language="c"><![CDATA[#include <stdio.h>
+	#include <stdlib.h>
+	int main ()
+	{
+	    int nr = 5;
+	    double **tm;
+	    printf("%p\n", &tm);
+	    if ((tm = (double **) malloc (nr * sizeof (double *))) == NULL)
+	    {
+		return -1;
+	    }
+	    printf("%p\n", tm);
+	    for (int i = 0; i < nr; ++i)
+	    {
+		if ((tm[i] = (double *) malloc ((i + 1) * sizeof (double))) == NULL)
+		{
+		    return -1;
+		}
+	    }
+	    printf("%p\n", tm[0]);
+	    for (int i = 0; i < nr; ++i)
+		for (int j = 0; j < i + 1; ++j)
+		    tm[i][j] = i * (i + 1) / 2 + j;
+	    for (int i = 0; i < nr; ++i)
+	    {
+		for (int j = 0; j < i + 1; ++j)
+		    printf ("%f, ", tm[i][j]);
+		printf ("\n");
+	    }
+	    for (int i = 0; i < nr; ++i)
+	    {
+		for (int j = 0; j < i + 1; ++j)
+		    printf ("%f, ", tm[i][j]);
+		printf ("\n");
+	    }
+	    for (int i = 0; i < nr; ++i)
+		free (tm[i]);
+	    free (tm);
+	    return 0;
+	}
+	]]></programlisting>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
-        </para>            
-    </section>        
+        </para>    
+        <para>
+            A program létrehoz egy double ** típusú változót, amely egy tömb memóriacímére mutat, majd ennek a tömbnek minden
+            eleme is egy-egy memóriacímre fog mutatni, méghozzá az adott elem sorszámának megfelelő mennyiségű tömb elemre, ahogyan
+            azt az alábbi ábra is reprezentálja. A <function>malloc</function> segítségével mindíg annyi memóriacímet foglalhatunk
+            le amennyire szükségünk van, jelen esetben amekkora a mérete az adott változótípusnak.
+        </para>
+        <para>
+        <inlinemediaobject>
+		<imageobject>
+                            <imagedata fileref="matrix.png"/>
+		</imageobject>
+                <textobject>
+                            <phrase>Háromszögmátrix</phrase>
+                </textobject>
+	</inlinemediaobject>
+        </para>
+    </section> 
+           
     <section>
         <title>C EXOR titkosító</title>
         <para>
@@ -32,9 +88,43 @@
             Megoldás forrása:                
         </para>
         <para>
+            <programlisting language="c"><![CDATA[#include <stdio.h>
+	#include <unistd.h>
+	#include <string.h>
+	#define MAX_KULCS 100
+	#define BUFFER_MERET 256
+                
+	int main (int argc, char **argv)
+	{
+	  char kulcs[MAX_KULCS];
+	  char buffer[BUFFER_MERET];
+	  int kulcs_index = 0;
+	  int olvasott_bajtok = 0;
+	  int kulcs_meret = strlen (argv[1]);
+	  strncpy (kulcs, argv[1], MAX_KULCS);
+	  while ((olvasott_bajtok = read (0, (void *) buffer, BUFFER_MERET)))
+	    {
+	      for (int i = 0; i < olvasott_bajtok; ++i)
+		{
+		  buffer[i] = buffer[i] ^ kulcs[kulcs_index];
+		  kulcs_index = (kulcs_index + 1) % kulcs_meret;
+		}
+	      write (1, buffer, olvasott_bajtok);
+	    }
+	}
+	]]> </programlisting>			
+        </para>
+        <para>
             Tanulságok, tapasztalatok, magyarázat...
-        </para>            
-    </section>        
+        </para>   
+        <para>
+            Az EXOR másnéven xor művelet bájtok lefedését, majd pedig a kizáró vagy művelet elvégzését az egymásra eső biteken
+            jelenti, azaz, ha a = 101 és b = 110 akkor a^b = 011.
+            A fent leírt program az xor művelet segítségével titkosít egy szöveget, melyhez egy általunk megadott kulcsot
+            használ. Eredeti szöveg ^ kulcs = titkos szöveg | Titkos szöveg ^ kulcs = eredeti szöveg
+        </para>      
+    </section>
+            
     <section>
         <title>Java EXOR titkosító</title>
         <para>
@@ -44,12 +134,16 @@
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása: <link xlink:href="https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/ch01.html#exor_titkosito">https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/ch01.html#exor_titkosito</link>                
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
-        </para>            
-    </section>        
+        </para>
+        <para>
+            A program lényege ugyanaz, mint az előző alcímnél C-ben, csak ezúttal Javában.
+        </para>        
+    </section>
+           
     <section>
         <title>C EXOR törő</title>
         <para>
@@ -59,12 +153,20 @@
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
-        </para>
+            Megoldás forrása:<link xlink:href="https://github.com/gergokinczel/unideb/blob/master/c_exor_toro.c">https://github.com/gergokinczel/unideb/blob/master/c_exor_toro.c</link>         </para>
+        <para><link xlink:href="https://progpater.blog.hu/2011/02/15/felvetelt_hirdet_a_cia?fbclid=IwAR20XPCHTlyHUvM0GGA5adxYhVhwFfd8wup-dUNn7_8rb3_mQb4Seq4Kb4w">https://progpater.blog.hu/2011/02/15/felvetelt_hirdet_a_cia?fbclid=IwAR20XPCHTlyHUvM0GGA5adxYhVhwFfd8wup-dUNn7_8rb3_mQb4Seq4Kb4w</link>   </para>      
+        
         <para>
             Tanulságok, tapasztalatok, magyarázat...
-        </para>            
-    </section>        
+        </para>
+        <para>
+            A C EXOR törő lényege, hogy megtalálja a kulcsot mely egy EXOR-ral titkosíott magyar szöveget feltör és 
+            amely kulcsnak a mérete akár 8 karakter. Ez után pedig kiírja a kulcsot és a tiszta szöveget.
+            A program úgy végzi a kulcs megtalálását, hogy minden lehetséges kulcs kombinációt kipróbál, majd a legmegfelelőbbet
+            kiválasztja.
+        </para>       
+    </section>  
+          
     <section>
         <title>Neurális OR, AND és EXOR kapu</title>
         <para>
@@ -79,22 +181,28 @@
         <para>
             Tanulságok, tapasztalatok, magyarázat...
         </para>            
-    </section>        
+    </section> 
+           
     <section>
         <title>Hiba-visszaterjesztéses perceptron</title>
         <para>
             C++
         </para>
         <para>
-            Megoldás videó:
+            Megoldás videó: <link xlink:href="https://www.youtube.com/watch?v=XpBnR31BRJY">https://www.youtube.com/watch?v=XpBnR31BRJY</link>
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása: <link xlink:href="https://github.com/nbatfai/nahshon/blob/master/ql.hpp#L64">https://github.com/nbatfai/nahshon/blob/master/ql.hpp#L64</link>             
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
-        </para>            
-    </section>        
-        
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+        </para>
+        <para>
+        Azt a hálót, amelyben az összes bemenet közvetlenül a kimenetekre kapcsolódik egyrétegű neurális hálónak 
+        (single layer neural network) vagy perceptron (perceptron) hálónak nevezzük. Mivel mindegyik kimeneti egység 
+        független a többitől – mindegyik súly csak egyetlen kimenetre van hatással – vizsgálatainkat korlátozhatjuk az 
+        egykimenetű perceptronra.
+        </para>          
+    </section>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 </chapter>                
