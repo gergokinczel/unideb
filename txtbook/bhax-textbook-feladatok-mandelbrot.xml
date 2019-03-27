@@ -11,23 +11,37 @@
                 
         </para>
         <para>
-            Megoldás videó:
+            Megoldás videó: <link xlink:href="https://youtu.be/gvaqijHlRUs">https://youtu.be/gvaqijHlRUs</link>
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása: <link xlink:href="https://sourceforge.net/p/udprog/code/ci/master/tree/source/kezdo/elsocpp/mandelbrot/mandelbrot.cpp#l1">https://sourceforge.net/p/udprog/code/ci/master/tree/source/kezdo/elsocpp/mandelbrot/mandelbrot.cpp#l1</link>               
+        </para>
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            A Mandelbrot-halmaz egy síkbeli alakzat, amelyet egy alapvetően nagyon egyszerű algebrai összefüggés bonyolultabb 
+            (végtelennel kapcsolatos, analitikus fogalmakat, határértékszámítást igénylő) elemzése ad meg, rajzol ki. 
+            Ezeknek az összefüggéseknek a még legegyszerűbb (bár nem az egyetlen lehetséges) 
+            megközelítési módja a komplex számok felhasználásával történhet.
+            A Mandelbrot-halmazt Benoît Mandelbrot fedezte fel, és Adrien Douady és John Hamal Hubbard nevezte el róla 1982-ben.
         </para>
     </section>        
         
     <section>
         <title>A Mandelbrot halmaz a <filename>std::complex</filename> osztállyal</title>
         <para>
-                
+            Megoldás videó: <link xlink:href="https://youtu.be/gvaqijHlRUs">https://youtu.be/gvaqijHlRUs</link>
         </para>
         <para>
-            Megoldás videó:
+            Megoldás forrása: <link xlink:href="https://github.com/gergokinczel/unideb/blob/Mandel/mandel_komplex.cpp">https://github.com/gergokinczel/unideb/blob/Mandel/mandel_komplex.cpp</link>               
         </para>
         <para>
-            Megoldás forrása:                
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            A program megközelítése ugyanzaz, egyetlen különbség, hogy egy általunk készített struktúra helyett felhasználjuk
+            a complex osztályt, melyben előre elkészített struktúrákat alkalmazunk.
         </para>
     </section>        
                 
@@ -43,19 +57,31 @@
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            A biomorfok biológikusnak kinéző Pickover Szálak. Az 1980-as évek végén Clifford Pickover létrehozott úgynevezett
+            biological feedback organizmusokat, hasonlóakat a Júlia és Mandelbrot halmazokhoz. Pickover szerint egy biomorf egy
+            olyan algoritmus, melyet változatos és összetett formák létrehozására lehet használni, melyek ugyanakkor 
+            gerinctelen életformákra hasonlítanak. Ezek az alakok bonyolultak és nehéz őket megjósolni mielőtt feltérképeznénk a kimenetelüket.
         </para>                        
     </section>                     
 
     <section>
-        <title>A Mandelbrot halmaz CUDA megvalósítása</title>
+        <title>A Mandelbrot halmaz CUDA megvalósítása</title> 
         <para>
         </para>
         <para>
-            Megoldás videó: 
+            Megoldás videó: <link xlink:href="https://youtu.be/gvaqijHlRUs">https://youtu.be/gvaqijHlRUs</link>
         </para>
         <para>
             Megoldás forrása:  
         </para>
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            
+        </para> 
     </section>                     
 
     <section>
@@ -64,23 +90,39 @@
             Építs GUI-t a Mandelbrot algoritmusra, lehessen egérrel nagyítani egy területet, illetve egy pontot
             egérrel kiválasztva vizualizálja onnan a komplex iteréció bejárta z<subscript>n</subscript> komplex számokat!
         </para>
-            
+        
         <para>
-            Megoldás forrása:  
+            Megoldás videó: <link xlink:href="https://bhaxor.blog.hu/2018/09/02/ismerkedes_a_mandelbrot_halmazzal">https://bhaxor.blog.hu/2018/09/02/ismerkedes_a_mandelbrot_halmazzal</link>
         </para>
-
+        
         <para>
-            Megoldás videó: 
+            Megoldás forrása:  <link xlink:href="https://github.com/gergokinczel/unideb/tree/Mandel/mandelbrot_rgb">https://github.com/gergokinczel/unideb/tree/Mandel/mandelbrot_rgb</link>
         </para>
         <para>
-            Megoldás forrása:  
+            Tanulságok, tapasztalatok, magyarázat...
         </para>
+        <para>
+            A Mandelbrot nagyító a Mandelbrot halmaz létrehozását viszi egy lépéssel tovább. Minden egyes alkalommal, amikor ráközelítünk
+            a kép egy részére, a program azt újrarajzolja "kinagyítja", de mivel a halmaz egy fraktál, ezt a végtelenségig meg tudjuk ismételni,
+            elérve érdekesebbnél érdekesebb formákat.
+        </para> 
     </section>                     
                                                                                                                                                                             
     <section>
         <title>Mandelbrot nagyító és utazó Java nyelven</title>
         <para>
+            Megoldás videó: <link xlink:href="https://youtu.be/Ui3B6IJnssY">https://youtu.be/Ui3B6IJnssY</link>
         </para>
+
+        <para>
+            Megoldás forrása:  
+        </para>
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            A lényeg ugyanaz mint C++ nyelven, ezúttal Javában megvalósítva.
+        </para> 
     </section>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 </chapter>                

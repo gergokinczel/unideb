@@ -46,8 +46,18 @@
             Tanulságok, tapasztalatok, magyarázat...
         </para>
         <para>
-            Decimálisból unárisba úgy váltjuk a számokat, hogy amennyi a decimális szám annyiszor megy végbe a ciklus és annyi 
-            darab I karaktert fogunk a képernyőre íratni ötössével elválasztva.
+            A Turing gép egy matematikai modellje a számításnak ami definiál egy absztrakt gépet, mely szimbólumokat
+            manipulál egy szalagon miközben több feltételt kielégít. A Turing gépet Alan Turing találta fel 1936-ban.
+            Ő egy "a-machine"(automatic machine)-automata gépnek nevezte. Ezzel a modellel képes volt két esszenciális 
+            kérdésre válaszolni: létezik e egy olyan gép, mely meg tudja határozni, hogy az éppen elvégzésben levő feladat
+            "körkörös"(pl.lefagyott, vagy nem tudja folytatni számításait); ugyanakkor létezik e egy olyan gép, amely meg tudja
+            határozni, hogy a szalagján levő gép valaha is nyomtat e egy adott szimbólumot.
+            
+         </para>
+        <para>
+            Ebben a példában decimálisból unárisba úgy váltjuk a számokat, hogy amennyi a decimális szám annyiszor 
+            hajtunk végbe egy ismétlő ciklust és annyi ugyanannyi darab I karaktert fogunk a képernyőre íratni 
+            ötössével elválasztva.
         </para>
     </section>        
         
@@ -55,15 +65,50 @@
         <title>Az a<superscript>n</superscript>b<superscript>n</superscript>c<superscript>n</superscript> nyelv nem környezetfüggetlen</title>
         <para>
             Mutass be legalább két környezetfüggő generatív grammatikát, amely ezt a nyelvet generálja!
-        </para>
-        <para>
-            Megoldás videó:
-        </para>
+            </para>
         <para>
             Megoldás forrása:                
         </para>
         <para>
+                <programlisting ><![CDATA[
+                    S, X, Y legyenek változók
+                    a, b ,c legyenek konstansok
+                    
+                    S->abc, S->aXbc, Xb->bX, Xc->Ybcc, bY->Yb, aY->aaX, aY->aa
+                    
+                    S (S->aXbc)
+                    aXbc (Xb->bX)
+                    abXc (Xc->Ybcc)
+                    abYbcc (bY->Yb)
+                    AYbbcc (aY->aa)
+                    aabbcc
+                ]]></programlisting>        
+        </para>
+         <para>
+                <programlisting><![CDATA[
+                    A, B, C legyenek változók
+                    a, b ,c legyenek konstansok
+                    
+                    A->aAB, A->aC, CB->bCc, cB->Bc, C->bc
+                    
+                    A (A->aAB)
+                    aAB (A->aC)
+                    aaCB (CB->bCc)
+                    aabCc (C->bc)
+                    aabbcc
+                ]]></programlisting>        
+        </para>
+        <para>
             Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            A fent leírt generatív nyelvtan és Chomsky-hierarchia kidolgozása, Noam Chomsky amerikai nyelvész kutató nevéhez fűződik.
+            Ezt a modellt formális nyelvek létrehozására használják. Az alapján működik, hogy a nyelv részit kifejezőerő szerint
+            osztályozza, és az erősebb osztályok elemei a gyengébb osztályok elemeinek létrehozására képesek.
+        </para>
+        <para>
+            A generatív nyelvtannak négy fontos eleme van: terminális szimbólumok(konstansok), nem terminális jelek(változók),
+            kezdőszimbólum(egy kitűntetett szimbólum 'S') és helyettesítési szabályok.
         </para>
     </section>        
                 
