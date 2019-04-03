@@ -19,7 +19,23 @@
                 </publishername>
             </publisher>
             <pubdate>2005</pubdate>
-        </biblioentry>  
+        </biblioentry>
+        <biblioentry>
+            <abbrev>PICI</abbrev>
+            <authorgroup>
+                <author>
+                    <personname>
+                        <firstname>István</firstname>
+                        <surname>Juhász</surname>
+                    </personname>
+                </author>
+            </authorgroup>
+            <title>Magas szintű programozási nyelvek 1</title>
+            <publisher>
+                <publishername>mobiDIÁK</publishername>
+            </publisher>
+            <pubdate>2008</pubdate>
+        </biblioentry>   
     </bibliodiv> 
     <bibliodiv>
         <title>C</title>

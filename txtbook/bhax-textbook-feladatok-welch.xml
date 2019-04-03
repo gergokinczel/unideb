@@ -8,20 +8,23 @@
     <section>
         <title>Első osztályom</title>
         <para>
-            Valósítsd meg C++-ban és Java-ban az módosított polártranszformációs algoritmust! A matek háttér 
+            Valósítsd meg C++-ban és Java-ban a módosított polártranszformációs algoritmust! A matek háttér 
             teljesen irreleváns, csak annyiban érdekes, hogy az algoritmus egy számítása során két normálist
             számol ki, az egyiket elspájzolod és egy további logikai taggal az osztályban jelzed, hogy van vagy
             nincs eltéve kiszámolt szám.
         </para>
         <para>
-            Megoldás videó:
+            Megoldás forrása:  <link xlink:href="https://sourceforge.net/p/udprog/code/ci/master/tree/source/labor/polargen/ ">https://sourceforge.net/p/udprog/code/ci/master/tree/source/labor/polargen/ </link>             
+        <link xlink:href="https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/ch01.html">https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/ch01.html</link>
         </para>
         <para>
-            Megoldás forrása:                
+            Tanulságok, tapasztalatok, magyarázat...
         </para>
         <para>
-            Tanulságok, tapasztalatok, magyarázat... térj ki arra is, hogy a JDK forrásaiban a Sun programozói
-            pont úgy csinálták meg ahogyan te is, azaz az OO nemhogy nem nehéz, hanem éppen természetes neked!
+            A program megvalósítja a megvalósíthatatlant. Random számokból még randomabb számokat készít, mindezt szorzás, összeadás
+            kivonás négyzetre emelés, gyökvonás és logaritmusok segítségével. A C++ és Java verzió nem sokban tér el egymástól, 
+            Javában az osztályok elkészítése valamivel kézenfekvőbb, sokra viszont nem használjuk, csupán egy logikai változót
+            reprezentál, amely jelöli, hogy van e éppen tárolt szám.
         </para>                
     </section>        
 
@@ -31,10 +34,16 @@
             Valósítsd meg C-ben az LZW algoritmus fa-építését!
         </para>
         <para>
-            Megoldás videó:
+            Megoldás forrása: <link xlink:href="https://github.com/gergokinczel/unideb/blob/master/binfa_c.c">https://github.com/gergokinczel/unideb/blob/master/binfa_c.c</link> 
         </para>
         <para>
-            Megoldás forrása:                
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            A binfa egy bináris gráf, melyben a 0-ás elemek balra az 1-es elemek jobbra kerülnek egy gyökértől kiindulva.
+            Bemeneti adatként egy 0 és 1-esekből álló számláncot kap az algoritmus, melyből sorban haladva a fába építi az elemeket,
+            és minden olyan alkalommal, amikor beépít egy elemet a fába visszaugrik a gyökérre, egészen addig míg el nem fogynak
+            a számok.           
         </para>
     </section>        
         
@@ -44,10 +53,52 @@
             Járd be az előző (inorder bejárású) fát pre- és posztorder is!
         </para>
         <para>
-            Megoldás videó:
+            Megoldás forrása: <programlisting language="c"><![CDATA[//posztorder
+void kiir (BINFA_PTR elem)
+{
+  if (elem != NULL)
+    {
+      ++melyseg;
+      if (melyseg > max_melyseg)
+	          max_melyseg = melyseg;
+
+      kiir (elem->jobb_egy);
+      kiir (elem->bal_nulla);
+      for (int i = 0; i < melyseg; ++i)
+            printf ("---");
+      printf ("%c(%d)\n", elem->ertek < 2 ? '0' + elem->ertek : elem->ertek, melyseg-1);
+
+      --melyseg;
+    }
+}
+            ]]></programlisting>
+            <programlisting language="c"><![CDATA[//preorder
+void kiir (BINFA_PTR elem)
+{
+  if (elem != NULL)
+    {
+      ++melyseg;
+      if (melyseg > max_melyseg)
+	          max_melyseg = melyseg;
+                
+      for (int i = 0; i < melyseg; ++i)
+            printf ("---");
+      printf ("%c(%d)\n", elem->ertek < 2 ? '0' + elem->ertek : elem->ertek, melyseg-1);
+      kiir (elem->jobb_egy);
+      kiir (elem->bal_nulla);
+
+      --melyseg;
+    }
+}
+            ]]></programlisting>
         </para>
         <para>
-            Megoldás forrása:                
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            A fabejárás változtatása egy nagyon egyszerű művelet, csupán a kiírató algoritmusban kell a kiíratás helyét felcserélni:
+            a preorder(gyökérkezdő) bejáráshoz a kiíratást a függvény újrahívása elé kell tenni, a posztorder(gyökérvégző) bejáráshoz
+            pedig a kiíratást a függvény újrahívása után kell elhelyezni.
         </para>
     </section>        
                         
@@ -58,10 +109,15 @@
             osztálya. A gyökér csomópont legyen kompozícióban a fával!
         </para>
         <para>
-            Megoldás videó:
+            Megoldás forrása: <link xlink:href="https://github.com/gergokinczel/unideb/blob/master/binfa2.cpp">https://github.com/gergokinczel/unideb/blob/master/binfa2.cpp</link>             
         </para>
         <para>
-            Megoldás forrása:                
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>
+        <para>
+            A fa lényegében ugyanaz, mint C-ben viszont át van ültetve egy osztályba. Ennek az osztálynak van egy további Csomópont
+            és Fa osztálya melyeket a fa építésénél és bejárásánál is egyaránt használnunk kell, és amelyek átláthatóbbá teszik
+            a forráskódunkat.
         </para>
     </section>        
                 
@@ -72,12 +128,17 @@
             fával!
         </para>
         <para>
-            Megoldás videó: 
+            Megoldás forrása: <link xlink:href="https://github.com/gergokinczel/unideb/blob/master/binfa_original.cpp">https://github.com/gergokinczel/unideb/blob/master/binfa_original.cpp</link>
         </para>
         <para>
-            Megoldás forrása:  
+            Tanulságok, tapasztalatok, magyarázat...
         </para>
-    </section>                     
+        <para>
+            Ebben a megoldásban az előzőhöz képest megváltozik a gyökér, mely a jobb és baloldali elemekhez hasonlóan már aggregációban
+            lesz a fával, azaz mutatóként hozzuk létre. Lefoglaljuk a memóriacímét nem csak a jobb és bal elemeknek, hanem
+            a gyökérnek is, ezzel konzisztensé téve a fa részeit.
+        </para>
+    </section>
 
     <section>
         <title>Mozgató szemantika</title>
@@ -86,10 +147,13 @@
             értékadásra alapozva!
         </para>
         <para>
-            Megoldás videó: 
+            Megoldás forrása: <link xlink:href="https://gist.github.com/gergokinczel/7ded0f06588bbee48117c53a596aa2e9">https://gist.github.com/gergokinczel/7ded0f06588bbee48117c53a596aa2e9</link>
         </para>
         <para>
-            Megoldás forrása:  
+            A mozgató szemantika lehetőséget nyújt arra, hogy egy t objektumot egy másik objektum felé "mozgassunk", a forrásait
+            átvigyük. A binfánkban ezt arra használhatjuk és használjuk, hogy egy másolatot készítsünk a már felépített binfáról,
+            majd azt újra kiírjuk. Erre a mozgatásra az <function>std::move</function> parancsot használjuk fel, mely nemcsak 
+            binfa, hanem bármilyen más objektum mozgatását is megengedi.
         </para>
     </section>                     
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         

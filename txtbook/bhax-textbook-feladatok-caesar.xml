@@ -134,13 +134,53 @@
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása: <link xlink:href="https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/ch01.html#exor_titkosito">https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/ch01.html#exor_titkosito</link>                
+            Megoldás forrása:              
+        </para>
+        <para>
+        <programlisting language="java"><![CDATA[import java.io.InputStream;
+import java.io.OutputStream;
+
+public class ExorTitkosító {
+    
+    public static void Exor(String kulcsSzöveg,java.io.InputStream bejövőCsatorna,java.io.OutputStream kimenőCsatorna)             
+    throws java.io.IOException {
+            
+        byte [] kulcs = kulcsSzöveg.getBytes();
+        byte [] buffer = new byte[256];
+        int kulcsIndex = 0;
+        int olvasottBájtok = 0;
+
+        while((olvasottBájtok = bejövőCsatorna.read(buffer)) != -1) 
+        {
+            for(int i=0; i<olvasottBájtok; ++i) 
+            {
+                buffer[i] = (byte)(buffer[i] ^ kulcs[kulcsIndex]);
+                kulcsIndex = (kulcsIndex+1) % kulcs.length;
+            }
+            kimenőCsatorna.write(buffer, 0, olvasottBájtok);
+        }  
+    }
+    
+    public static void main(String[] args) {
+        
+        try 
+        {
+            ExorTitkosító(args[0], System.in, System.out);
+        } 
+        catch(java.io.IOException e) { e.printStackTrace(); }
+    } 
+}
+	]]> </programlisting>
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
         </para>
         <para>
-            A program lényege ugyanaz, mint az előző alcímnél C-ben, csak ezúttal Javában.
+            Lényeges különbséget nem tapasztalhatunk a C verziós és a Java verziós EXOR titkosító között.
+            Itt az algoritmus az ExorTitkosító osztályban lett megvalósítva, de ugyanazt az elvet használja, 
+            mint az előző feladatban leírt verzió. A külső while ciklus buffer tömbönként addig olvassa a bemenetet, 
+            amíg csak tudja. A belső for ciklusban helyezzük rá a kulcsot a beolvasott bájtokra a kulcsIndex változó segítségével, 
+            majd végrehajtjuk a kizáró vagy műveletet, az eredmény a buffer tömbben keletkezik, amit végül a kimenetre írunk. 
         </para>        
     </section>
            
@@ -180,7 +220,34 @@
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
-        </para>            
+        </para>
+        <para>
+            A neurális háló egy alapot képez a mesterséges intelligencia megértéséhez és elkészítéséhez. Ennek minimum három fő
+            rétege van. A bementeti réteg, amely a konkrét összehasonlítandó elemeket adja át. A köztes rétegben történik meg a 
+            tényleges művelet elvégzése, ilyen például a <function>vagy</function> és az <function>és</function> művelet. A kimeneti
+            rétegben pedig egy neuron/függvény melybe bekerül az információ.
+        </para>
+        <para>
+            A háló fő feladata, hogy az egyes neuronok egy értéket továbbítsanak, amennyiben a köztes rétegben szereplő érték elért
+            egy úgynevezett küszöbértéket, majd pedig egy véges lépésszám elvégzése után megközelítsék a valós eredményt.
+            Minden kapcsolat rendelkezik egy súlyal, amely az adott kapcsolat előjelét és erősségét határozza meg.
+        </para>
+        <para>
+            A forrásban szereplő példák közül a <function>vagy</function> és az <function>és</function> művelet bármi addíció nélkül
+            is kivételesen működik, az <function>XOR</function> művelethez viszont rejtett rétegekre is szükségünk van, hogy a kívánt pontosságot el
+            tudjuk érni. Ennek az az oka, hogy az <function>XOR</function> műveletet nem lehet lineárisan szeparálni, ellentétben 
+            a <function>vagy</function> és az <function>és</function> művelettel.
+        </para>
+        <para>
+        <inlinemediaobject>
+		<imageobject>
+                            <imagedata fileref="perceptron.png" scale="500"/>
+		</imageobject>
+                <textobject>
+                            <phrase>Műveletek függvényábrái</phrase>
+                </textobject>
+	</inlinemediaobject>
+        </para>
     </section> 
            
     <section>
