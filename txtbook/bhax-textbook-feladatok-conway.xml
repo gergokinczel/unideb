@@ -15,11 +15,177 @@
             Megoldás videó: <link xlink:href="https://bhaxor.blog.hu/2018/10/10/myrmecologist">https://bhaxor.blog.hu/2018/10/10/myrmecologist</link>
         </para>
         <para>
-            Megoldás forrása: <link xlink:href=""></link>               
+            Megoldás forrása: <link xlink:href="https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/Myrmecologist">https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/Myrmecologist</link>               
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
-        </para>            
+        </para>    
+        <para>
+            A hangyaszimuláció egy nagyon alapvető sejtautomata, melynek az a célja, hogy egy hangyabolyt immitáljon.
+        </para>
+        <para>
+            Az elkészített hangyaszimulációs programunk több részre van osztályokkal felbontva, melyeknek több különböző szerepe
+            van. Először is a legalapabb része a hangya kolóniánknak egy individuális hangya, mely az <function>Ant</function>
+            osztályba lett létrehozva és amely mindössze csak három adattal rendelkezik: a hangya x,y koordinátája és az iránya.
+            <programlisting language="C++"><![CDATA[#ifndef ANT_H
+#define ANT_H
+
+class Ant
+{
+public:
+    int x;
+    int y;
+    int dir;
+    Ant(int x, int y): x(x), y(y) {
+        
+        dir = qrand() % 8;
+        
+    }
+};
+
+typedef std::vector<Ant> Ants; 
+        ]]></programlisting>
+            Ezt az osztályt használja fel a programunk a továbbiakban, hogy a hangyákat elkészítse. Rendelkezünk még egy
+            <function>AntWin</function> osztállyal, amely tartalmazza konstruktort, dekonstruktort és a rajzolási eventet.
+            <programlisting language="C++"><![CDATA[#ifndef ANTWIN_H
+#define ANTWIN_H
+
+#include <QMainWindow>
+#include <QPainter>
+#include <QString>
+#include <QCloseEvent>
+#include "antthread.h"
+#include "ant.h"
+
+class AntWin : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    AntWin(int width = 100, int height = 75,
+           int delay = 120, int numAnts = 100,
+           int pheromone = 10, int nbhPheromon = 3,
+           int evaporation = 2, int cellDef = 1,
+           int min = 2, int max = 50,
+           int cellAntMax = 4, QWidget *parent = 0);
+
+    AntThread* antThread;
+
+    void closeEvent ( QCloseEvent *event ) {
+
+        antThread->finish();
+        antThread->wait();
+        event->accept();
+    }
+
+    void keyPressEvent ( QKeyEvent *event )
+    {
+
+        if ( event->key() == Qt::Key_P ) {
+            antThread->pause();
+        } else if ( event->key() == Qt::Key_Q
+                    ||  event->key() == Qt::Key_Escape ) {
+            close();
+        }
+
+    }
+
+    virtual ~AntWin();
+    void paintEvent(QPaintEvent*);
+
+private:
+
+    int ***grids;
+    int **grid;
+    int gridIdx;
+    int cellWidth;
+    int cellHeight;
+    int width;
+    int height;
+    int max;
+    int min;
+    Ants* ants;
+
+public slots :
+    void step ( const int &);
+};]]></programlisting>
+            Az utolsó osztályunk az <function>AntThread</function>, melyet a hangyák mozgatására használunk, ebbe bele tartozik
+            az, hogy új irányt adunk nekik, konkrétan elmozgatjuk őket és a feromon kibocsátásukat is meghatározzuk.
+            <programlisting language="C++"><![CDATA[#ifndef ANTTHREAD_H
+#define ANTTHREAD_H
+#include <QThread>
+#include "ant.h"
+
+class AntThread : public QThread
+{
+    Q_OBJECT
+
+public:
+    AntThread(Ants * ants, int ***grids, int width, int height,
+             int delay, int numAnts, int pheromone, int nbrPheromone, 
+             int evaporation, int min, int max, int cellAntMax);
+    
+    ~AntThread();
+    
+    void run();
+    void finish()
+    {
+        running = false;
+    }
+
+    void pause()
+    {
+        paused = !paused;
+    }
+
+    bool isRunnung()
+    {
+        return running;
+    }
+
+private:
+    bool running {true};
+    bool paused {false};
+    Ants* ants;
+    int** numAntsinCells;
+    int min, max;
+    int cellAntMax;
+    int pheromone;
+    int evaporation;
+    int nbrPheromone;
+    int ***grids;
+    int width;
+    int height;
+    int gridIdx;
+    int delay;
+    
+    void timeDevel();
+
+    int newDir(int sor, int oszlop, int vsor, int voszlop);
+    void detDirs(int irany, int& ifrom, int& ito, int& jfrom, int& jto );
+    int moveAnts(int **grid, int row, int col, int& retrow, int& retcol, int);
+    double sumNbhs(int **grid, int row, int col, int);
+    void setPheromone(int **grid, int row, int col);
+
+signals:
+    void step ( const int &);
+
+}; ]]></programlisting>
+        </para>
+        <para>
+            Ezek az osztályok mind előbb definiálva vannak egy külön fájlba (ezek láthatóak fentébb), majd őket meghíván a program
+            használódnak fel.
+        </para>
+        <para>
+        <inlinemediaobject>
+		<imageobject>
+                            <imagedata fileref="hangya.png" scale="50" />
+		</imageobject>
+                <textobject>
+                            <phrase>Hangyaélet</phrase>
+                </textobject>
+	</inlinemediaobject>
+        </para>
     </section>        
     <section>
         <title>Java életjáték</title>
@@ -46,25 +212,103 @@
             Megoldás videó: 
         </para>
         <para>
-            Megoldás forrása: <link xlink:href=""></link>               
+            Megoldás forrása: <link xlink:href="https://sourceforge.net/p/udprog/code/ci/master/tree/source/labor/Qt/Sejtauto/">https://sourceforge.net/p/udprog/code/ci/master/tree/source/labor/Qt/Sejtauto/</link>               
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
-        </para>            
+        </para>
+        <para>
+            Az Életjáték (Game of Life) egy sejtautomata, melyet John Horton Conway Britt matematikus fejlesztett ki
+            1970-ben. Sejtautomatának nevezünk egy olyan diszkrét modellt, melyet mikrostrukturák modellezésében
+            használnak fel: egy négzetrácsban helyezkedik el, a négyzetrácsok által közrefogott cellákat sejteknek 
+            nevezzük. A sejteknek több különböző állapota lehet, és ahogy telik az idő a cellák változtatják állapotukat
+            valamilyen feltétel szerint.
+        </para>    
+        <para>
+            A John Horton féle életjátékban nincs megadott játékos, az evolúciót a kezdeti pozíció határozza meg így nem
+            szükséges semmi beavatkozás.
+            Ezen felül a játékot négy különböző szabály határozza meg:
+        </para>
+        <itemizedlist mark='dash'>
+            <listitem>
+                <para>
+                    Bármely olyan élő cella, melynek kevesebb, mint két élő szomszédja van meghal, 
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Bármely olyan élő cella, melynek kettő vagy három élő szomszédja van, élhet tovább
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                   Bármely olyan élő cella, melynek több mint három élő szomszédja van meghal, túlnépesedés miatt
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                   Minden halott cella, melynek pontosan három élő szomszédja van, élő cellává válik
+                </para>
+            </listitem>
+        </itemizedlist>
+        <para>
+            Programunk, kivitelezéséhez két osztállyal rendelkezik, mindkettő előbb külön-külön definiálva egy különálló fájlba.
+            Az első meghívott osztály a <function>SejtAblak</function>, ebbe szerepel a konstruktor, dekonstruktor és a rajzoló
+            esemény(paint event). A második osztályunk a <function>SejtSzal</function>, itt pedig azok a programrészek futnak le, melyek 
+            melyek ellenőrzik a szabályok betartását és befolyásolják, hogy mely cellába van élet és melybe szűnik meg.
+        </para>
+        <para>
+        <inlinemediaobject>
+		<imageobject>
+                            <imagedata fileref="life.png" scale="50" />
+		</imageobject>
+                <textobject>
+                            <phrase>Életszimuláció kibontakozóban</phrase>
+                </textobject>
+	</inlinemediaobject>
+        </para>
+        <para>
+            
+        </para>      
     </section>        
     <section>
         <title>BrainB Benchmark</title>
         <para>
         </para>
         <para>
-            Megoldás videó: 
-        </para>
-        <para>
-            Megoldás forrása: <link xlink:href=""></link>               
+            Megoldás forrása: <link xlink:href="https://github.com/nbatfai/esport-talent-search">https://github.com/nbatfai/esport-talent-search</link>               
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
-        </para>            
+        </para>      
+        <para>
+            A videójátékok világában gyakran találkozhatunk azzal az eseménnyel, amikor a játékos elveszíti az
+            irányítást a karaktere fölött, pusztán a miatt, mert azt elveszítette a különböző játékelemek sokasága
+            miatt. Ez a szintfelmérő program pont ezt a jelenséget próbálja meg előidézni és a játékost próbára tenni, 
+            megerősítvén ennek az eseménynek a létezését.
+        </para>
+        <para>
+            Nekünk, mint játékos nincs más dolgunk, mint követni az egyik kockában elhelyezett karikát a kurzorral tíz percen
+            keresztül, miközben egyre több környezeti elem jelenik meg a képernyőn az általunk kiválasztott "karakter" mellett.
+            Mindezt azért, hogy ezek után egy teljes képet tudjunk nyerni a játékos képességeiről és a jelenség tényleges
+            létezéséről.
+        </para>
+        <para>
+            Forráskód szempontjából nagyban hasonlít az előző feladatokra: két fő osztályal rendelkezik. Az egyik osztály 
+            elvégzi a pálya rajzolását és ellenőrzi, hogy mikor kezdődik a játék, mikor van lenyomva az egérgomb. A másik osztály
+            végzi el a számításokat, azaz új akadályok beépítése, mozgatása, régiek eltűntetése abban az esetben ha már nincs 
+            lenyomva az egérgomb.
+        </para>
+        <para>
+        <inlinemediaobject>
+		<imageobject>
+                            <imagedata fileref="brainb.png"/>
+		</imageobject>
+                <textobject>
+                            <phrase>Samu a kiválasztott karakter</phrase>
+                </textobject>
+	</inlinemediaobject>
+        </para>
     </section>        
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 </chapter>                

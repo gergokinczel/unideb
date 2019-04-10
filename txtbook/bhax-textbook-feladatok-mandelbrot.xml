@@ -105,6 +105,9 @@
             A Mandelbrot nagyító a Mandelbrot halmaz létrehozását viszi egy lépéssel tovább. Minden egyes alkalommal, amikor ráközelítünk
             a kép egy részére, a program azt újrarajzolja "kinagyítja", de mivel a halmaz egy fraktál, ezt a végtelenségig meg tudjuk ismételni,
             elérve érdekesebbnél érdekesebb formákat.
+        </para>
+        <para>
+            
         </para> 
     </section>                     
                                                                                                                                                                             
@@ -115,13 +118,18 @@
         </para>
 
         <para>
-            Megoldás forrása:  
+            Megoldás forrása:  <link xlink:href="https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/apbs02.html#id570518">https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/apbs02.html#id570518</link>
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
         </para>
         <para>
-            A lényeg ugyanaz mint C++ nyelven, ezúttal Javában megvalósítva.
+            Látványában nem különbözik sokat a nagyító a C++-os verzióhoz képest, mégis kivitelezésében egy sokkal átláthatóbb
+            kódot kapunk. Forráskódunk két osztályra van felosztva, az egyikben találjuk meg a halmaz kiszámolását egy megadott
+            pontban, ezt felhasználván a másik osztályban szerepel a halmaz tényleges lerajzolása, egy pillanatkép készítése,
+            e mellett pedig a jobb egérgombbal való klikkeléskor elküldi a másik osztálynak az egér x,y koordinátája szerint 
+            rámutatott csomópontot, amivel újraszámolja a halmazt így "nagyítva" a képet. Ezt a folyamatot annyiszor tudjuk megismételni
+            ahányszor csak szeretnénk.
         </para> 
     </section>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         

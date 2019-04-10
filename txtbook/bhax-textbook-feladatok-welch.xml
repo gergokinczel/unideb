@@ -117,7 +117,9 @@ void kiir (BINFA_PTR elem)
         <para>
             A fa lényegében ugyanaz, mint C-ben viszont át van ültetve egy osztályba. Ennek az osztálynak van egy további Csomópont
             és Fa osztálya melyeket a fa építésénél és bejárásánál is egyaránt használnunk kell, és amelyek átláthatóbbá teszik
-            a forráskódunkat.
+            a forráskódunkat. Így tehát rendelkezünk egy konstruktorral, mely megadja a fánk kezdetleges helyzetét, ugyanakkor
+            meghadja a lehetőséget, hogy a jelenlegi csomópont változóval építhessük a fánkat. Ugyanakkor dekonstruktorunk is van,
+            melyre szükség van mivel helyet foglalunk a memóriában a csomópontoknak.
         </para>
     </section>        
                 
@@ -153,8 +155,13 @@ void kiir (BINFA_PTR elem)
             A mozgató szemantika lehetőséget nyújt arra, hogy egy t objektumot egy másik objektum felé "mozgassunk", a forrásait
             átvigyük. A binfánkban ezt arra használhatjuk és használjuk, hogy egy másolatot készítsünk a már felépített binfáról,
             majd azt újra kiírjuk. Erre a mozgatásra az <function>std::move</function> parancsot használjuk fel, mely nemcsak 
-            binfa, hanem bármilyen más objektum mozgatását is megengedi.
+            binfa, hanem bármilyen más objektum mozgatását is megengedi. Az így lemásolt, eredeti fa által lefoglalt hely
+            felszabadul a memóriából.
+            <programlisting language="c++"><![CDATA[
+            LZWBinFa binFa_uj = std::move ( binFa );
+            ]]></programlisting>
         </para>
+
     </section>                     
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 </chapter>                

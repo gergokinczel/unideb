@@ -203,7 +203,8 @@ public class ExorTitkosító {
             A C EXOR törő lényege, hogy megtalálja a kulcsot mely egy EXOR-ral titkosíott magyar szöveget feltör és 
             amely kulcsnak a mérete akár 8 karakter. Ez után pedig kiírja a kulcsot és a tiszta szöveget.
             A program úgy végzi a kulcs megtalálását, hogy minden lehetséges kulcs kombinációt kipróbál, majd a legmegfelelőbbet
-            kiválasztja.
+            kiválasztja(legmegfelelőbb itt egy olyan szövegre céloz mely gyakori magyar szavakat tartalmaz, és ugyanakkor
+            az átlagos szóhossznak is eleget tesz).
         </para>       
     </section>  
           
@@ -265,10 +266,13 @@ public class ExorTitkosító {
             Tanulságok, tapasztalatok, magyarázat...
         </para>
         <para>
-        Azt a hálót, amelyben az összes bemenet közvetlenül a kimenetekre kapcsolódik egyrétegű neurális hálónak 
-        (single layer neural network) vagy perceptron (perceptron) hálónak nevezzük. Mivel mindegyik kimeneti egység 
-        független a többitől – mindegyik súly csak egyetlen kimenetre van hatással – vizsgálatainkat korlátozhatjuk az 
-        egykimenetű perceptronra.
+            Azt a hálót, amelyben az összes bemenet közvetlenül a kimenetekre kapcsolódik egyrétegű neurális hálónak 
+            (single layer neural network) vagy perceptron (perceptron) hálónak nevezzük. Mivel mindegyik kimeneti egység 
+            független a többitől – mindegyik súly csak egyetlen kimenetre van hatással – vizsgálatainkat korlátozhatjuk az 
+            egykimenetű perceptronra. A perceptonok két fajta csomópontból tevődnek össze: bemeneti és kimenetiből. A két csomópont
+            között helyezkedik el az a súlyozott kapcsolat, mely meghatározza mennyire erős a ki és bemenet közötti viszony.
+            A háló aképpen tanul, hogy akár több száz ilyen súlyozást elvégez, majd egy bizonyos kimeneti érték felé konvergál
+            ami valószínűleg a megoldás.
         </para>          
     </section>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
