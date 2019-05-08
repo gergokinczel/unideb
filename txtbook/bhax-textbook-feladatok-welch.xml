@@ -130,7 +130,7 @@ void kiir (BINFA_PTR elem)
             fával!
         </para>
         <para>
-            Megoldás forrása: <link xlink:href="https://github.com/gergokinczel/unideb/blob/master/binfa_original.cpp">https://github.com/gergokinczel/unideb/blob/master/binfa_original.cpp</link>
+            Megoldás forrása: <link xlink:href="https://github.com/gergokinczel/unideb/blob/master/binfa_mutat.cpp">https://github.com/gergokinczel/unideb/blob/master/binfa_mutat.cpp</link>
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
@@ -139,6 +139,55 @@ void kiir (BINFA_PTR elem)
             Ebben a megoldásban az előzőhöz képest megváltozik a gyökér, mely a jobb és baloldali elemekhez hasonlóan már aggregációban
             lesz a fával, azaz mutatóként hozzuk létre. Lefoglaljuk a memóriacímét nem csak a jobb és bal elemeknek, hanem
             a gyökérnek is, ezzel konzisztensé téve a fa részeit.
+            Kódrészletben alig történik változás:
+            <programlisting language="C++"><![CDATA[
+        //előtte       
+protected       
+    Csomopont gyoker 
+--------------------------
+        //utána
+protected       
+    Csomopont *gyoker 
+            ]]></programlisting>
+            <programlisting language="C++"><![CDATA[
+        //előtte       
+public:
+   
+    LZWBinFa ():fa (&gyoker)
+    {
+    }
+--------------------------
+        //utána
+public:
+                
+    LZWBinFa ()
+    {
+    gyoker = new Csomopont();
+    fa = gyoker;
+    } ]]></programlisting>
+        <programlisting language="C++"><![CDATA[
+            //az összes előfordulásnál
+        //előtte       
+&gyoker
+--------------------------
+        //utána
+gyoker
+            ]]></programlisting>
+        <programlisting language="C++"><![CDATA[
+        //előtte       
+    ~LZWBinFa ()
+    {
+        szabadit (gyoker.egyesGyermek ());
+        szabadit (gyoker.nullasGyermek ());
+    }
+--------------------------
+        //utána
+    ~LZWBinFa ()
+    {
+        szabadit (gyoker->egyesGyermek ());
+        szabadit (gyoker->nullasGyermek ());
+    }
+            ]]></programlisting>
         </para>
     </section>
 

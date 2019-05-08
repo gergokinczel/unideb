@@ -7,36 +7,106 @@
     </info>
     <section>
         <title>Szoftmax Py MNIST</title>
-        <para>aa
+        <para>
             Python
         </para>
         <para>
-            Megoldás videó:
+            Megoldás videó: <link xlink:href="https://youtu.be/j7f9SkJR3oc">https://youtu.be/j7f9SkJR3oc</link>      
         </para>
         <para>
-            Megoldás forrása:                
-        </para>
-        <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>
-    </section>        
-
-    <section>
-        <title>Szoftmax R MNIST</title>
-        <para>
-            R            
-        </para>
-        <para>
-            Megoldás videó:
-        </para>
-        <para>
-            Megoldás forrása:                
+            Megoldás forrása: <link xlink:href="https://github.com/tensorflow/tensorflow/releases/tag/v0.9.0">https://github.com/tensorflow/tensorflow/releases/tag/v0.9.0
+            </link>
+            <link xlink:href="https://progpater.blog.hu/2016/11/13/hello_samu_a_tensorflow-bol">
+                https://progpater.blog.hu/2016/11/13/hello_samu_a_tensorflow-bol</link>  
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
         </para>
-    </section>        
+        <para>
+            A MNIST(Modified National Institute of Standards and Technology database) egy kezdő szintű, gépi képfeldolgozó
+            adatbázis, mely több különböző kézzel írott digitális képet tartalmaz, mint például ez:
+        </para>
+        <para>
+        <inlinemediaobject>
+		<imageobject>
+                            <imagedata fileref="mnist.png" scale="50" />
+		</imageobject>
+                <textobject>
+                            <phrase>MNIST adatbázis példa</phrase>
+                </textobject>
+	</inlinemediaobject>
+        </para>
+        <para>
+            Ugyanakkor tartalmazza az összes képhez kapcsolódó címkét is, ahogyan azt a fenti kép is reprezentálja.
+        </para>
+        <para>
+            A Szoftmax MNIST segítségével feltaníthatjuk programunkat, hogy akár 90%-os pontossággal meghatározza éppen milyen 
+            számjegyet "lát" a képernyőn, ehhez pedig elengedhetetlenül szükséges egy nagyobb adatbázis amiből tanítjuk, és melynek
+            segítségével tesztelhetjük is programunkat.
+        </para>
+        <para>
+            Python kódot használunk, melybe implementáljuk a Tensorflow modult, ami többek között lehetővé teszi, hogy a CUDA kompatibilis 
+            GPU-nkat is felhasználjuk a számolásokhoz, így gyorsítva és pontosítva a gépi tanulást, ugyanakkor pythonon kívüli
+            komplex számításoknak ad helyet. Ezt a modult a következőképpen implementáljuk a kódunkba:
+        </para>
+        <para>
+            <programlisting language="python"><![CDATA[
+                import tensorflow as tf
+            ]]></programlisting>
+        </para>
+        <para>
+            Ezen kívül szükséges az adatbázist is implementálnunk a kódba:
+            <programlisting language="python"><![CDATA[
+from tensorflow.examples.tutorials.mnist import input_data            
+mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
+            ]]></programlisting>
+            Ez az adatbázis két külön részre van osztva: <function>mnist.train</function> és <function>mnist.test</function>. 
+            Ezzel megkülönböztetjük azokat a képeket melyeket tesztelésre és azokat melyeket tanításra használunk. 
+            Ahogyan az korábban is említve volt, minden tagja az adatbázisnak két elemet tartalmaz, egy képet és a hozzá tartozó
+            címkét, melyet így találunk a kódban: <function>mnist.test.images</function> <function>mnist.test.labels</function>.
+        </para>
+         <para>
+            Mindezek után elkezdhetjük elkészíteni a modellünket:
+           </para> <para>
+             <programlisting language="python"><![CDATA[x = tf.placeholder(tf.float32, [None, 784])
+W = tf.Variable(tf.zeros([784, 10]))
+b = tf.Variable(tf.zeros([10]))
+y = tf.nn.softmax(tf.matmul(x, W) + b)
+            ]]></programlisting>
+            </para> 
+            <para>
+            Az <function>x</function> itt nem egy konkrét változó, hanem egy helykitöltő, mellyel meghatározzuk, hogy bármennyi képet
+            felhasználhatunk, és ezek mindegyikét egy 784 tagú vektorba sűrítjük bele. A <function>W</function> és <function>b</function>
+            változó jelölik a súlyt és az alakot melyeket az <function>y</function> értékének kiszámításához fogunk használni,
+            amivel pedig megkapjuk már maga a modellt.
+            </para> 
+            
+        <para>
+            A következő részben tanítjuk a modellt:
+            <programlisting language="python"><![CDATA[y_ = tf.placeholder(tf.float32, [None, 10])
+cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y), reduction_indices=[1]))
+train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
 
+tf.initialize_all_variables().run()
+for i in range(1000):
+  batch_xs, batch_ys = mnist.train.next_batch(100)
+  train_step.run({x: batch_xs, y_: batch_ys})
+            ]]></programlisting>
+        </para>
+         
+        <para>
+            Majd pedig az elkészült modellt leteszteljük:
+            <programlisting language="python"><![CDATA[correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+print(accuracy.eval({x: mnist.test.images, y_: mnist.test.labels}))
+            ]]></programlisting>
+            Ennek a modellnek egy körülbelül 91%-os sikerességi aránya kellene, hogy legyen melyet persze lehet még javítani, de
+            mint kezdők megelégszünk ezzel az eredménnyel.
+        </para>
+                
+        
+    </section>        
+    
     <section>
         <title>Mély MNIST</title>
         <para>
@@ -46,35 +116,19 @@
             Megoldás videó:
         </para>
         <para>
-            Megoldás forrása:                
+            Megoldás forrása: <link xlink:href="https://github.com/tensorflow/tensorflow/blob/r1.4/tensorflow/examples/tutorials/mnist/mnist_deep.py">https://github.com/tensorflow/tensorflow/blob/r1.4/tensorflow/examples/tutorials/mnist/mnist_deep.py</link>       
         </para>
         <para>
             Tanulságok, tapasztalatok, magyarázat...
         </para>
     </section>        
-
+        
     <section>
-        <title>Deep dream</title>
-        <para>
-            Keras            
-        </para>
-        <para>
-            Megoldás videó:
-        </para>
-        <para>
-            Megoldás forrása:                
-        </para>
-        <para>
-            Tanulságok, tapasztalatok, magyarázat...
-        </para>
-    </section>        
-                  
-    <section>
-        <title>Robotpszichológia</title>
+        <title>Minecraft-MALMÖ</title>
         <para>
         </para>
         <para>
-            Megoldás videó:
+            Megoldás videó: <link xlink:href="https://youtu.be/bAPSu3Rndi8">https://youtu.be/bAPSu3Rndi8</link>      
         </para>
         <para>
             Megoldás forrása:                
